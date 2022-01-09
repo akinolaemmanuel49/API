@@ -8,13 +8,14 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 import dependencies
-import authentication
+# import authentication
+from db.dals.user_dal import auth_handler
 from db.dals import user_dal
 # import schemas
 from schemas import user_schemas
 
 security = HTTPBearer()
-auth_handler = authentication.Authentication()
+# auth_handler = authentication.Authentication()
 
 router = APIRouter(prefix="/users")
 

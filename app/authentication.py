@@ -13,8 +13,8 @@ class Authentication:
     pwd_context = CryptContext(Settings.ENCRYPTION_SCHEMES)
     secret_key = Settings.JWT_SECRET_KEY
 
-    def encode_password(self, password: str) -> Optional[str]:
-        return self.pwd_context.hash(password)
+    def encode_password(self, plain_password: str) -> Optional[str]:
+        return self.pwd_context.hash(plain_password)
 
     def decode_password(self, plain_password: str, encoded_password: str) -> bool:
         return self.pwd_context.verify(plain_password, encoded_password)
