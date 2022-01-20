@@ -1,21 +1,20 @@
 """
 This handles routes pertaining to creating, modiifying, logging in a user."""
 
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Security
+from fastapi import APIRouter, Depends, HTTPException, Security, Query
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 import dependencies
-# import authentication
+
 from db.dals.user_dal import auth_handler
 from db.dals import user_dal
-# import schemas
+
 from schemas import user_schemas
 
 security = HTTPBearer()
-# auth_handler = authentication.Authentication()
 
 router = APIRouter(prefix="/users")
 
@@ -47,9 +46,17 @@ def get_users(db: Session = Depends(dependencies.get_db), skip: int = 0, limit: 
     return db_users
 
 
-@router.get("/{user_id}", response_model=user_schemas.User)
-def get_user(user_id: int, db: Session = Depends(dependencies.get_db)):
-    db_user = user_dal.get_user(db=db, user_id=user_id)
+@router.get("/user", response_model=user_schemas.User)
+def get_user(id: Optional[int] = None, email: Optional[str] = None, username: Optional[str] = None, db: Session = Depends(dependencies.get_db)):
+    if id is not None:
+        db_user = user_dal.get_user(db=db, user_id=id)
+    elif email is not None:
+        db_user = user_dal.get_user_by_email(db=db, email=email)
+    elif username is not None:
+        db_user = user_dal.get_user_by_username(db=db, username=username)
+    else:
+        raise HTTPException(
+            status_code=400, detail="Must provide either id or email")
     return db_user
 
 
