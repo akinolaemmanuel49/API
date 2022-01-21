@@ -17,6 +17,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     active = Column(Boolean, default=True)
+    is_admin = Column(Boolean, default=False)
 
     posts = relationship("Post", back_populates="owner")
     comments = relationship("Comment", back_populates="owner")
