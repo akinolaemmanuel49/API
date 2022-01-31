@@ -3,7 +3,7 @@ This handles routes pertaining to creating, modiifying, logging in a user."""
 
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Security, Query
+from fastapi import APIRouter, Depends, HTTPException, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
