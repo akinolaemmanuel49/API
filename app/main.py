@@ -6,7 +6,8 @@ from app.db.models import user_model as models
 from app.db.config import engine
 from app.routers import user_router, post_router, comment_router, reply_router
 
-app = FastAPI()
+app = FastAPI(title="API", description="API for a simple blog",
+              version="0.1.0")
 app.include_router(user_router.router)
 app.include_router(post_router.router)
 app.include_router(comment_router.router)
