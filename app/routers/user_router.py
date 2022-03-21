@@ -35,11 +35,6 @@ def refresh_token(credentials: HTTPAuthorizationCredentials = Security(security)
     return {"access_token": new_token}
 
 
-@router.get("/notasecret")
-def not_a_secret():
-    return "NOT A SECRET"
-
-
 @router.get("/", response_model=List[user_schemas.User])
 def get_users(db: Session = Depends(dependencies.get_db), skip: int = 0, limit: int = 100):
     db_users = user_dal.get_users(db, skip=skip, limit=limit)
@@ -71,11 +66,5 @@ def login(credentials: user_schemas.Credentials, db: Session = Depends(dependenc
 
     access_token = auth_handler.encode_token(db_user.id)
     refresh_token = auth_handler.encode_refresh_token(db_user.id)
-    return {"access_token": access_token, "refresh_token": refresh_token}
-
-
-@router.post("/secret")
-def secret_data(credentials: HTTPAuthorizationCredentials = Security(security)):
-    access_token = credentials.credentials
-    if (auth_handler.decode_token(access_token)):
-        return "SECRET DATA"
+    user_id = auth_handler.decode_token(access_token)
+    return {"access_token": access_token, "refresh_token": refresh_token, "user_id": user_id}
