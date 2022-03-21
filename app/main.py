@@ -1,9 +1,10 @@
-import uvicorn
+# import uvicorn
 from fastapi import FastAPI
 
-from db.models import user_model as models
-from db.config import engine
-from routers import user_router, post_router, comment_router, reply_router
+
+from app.db.models import user_model as models
+from app.db.config import engine
+from app.routers import user_router, post_router, comment_router, reply_router
 
 app = FastAPI()
 app.include_router(user_router.router)

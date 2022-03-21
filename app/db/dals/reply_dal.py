@@ -1,9 +1,9 @@
 import sqlalchemy
 from sqlalchemy.orm import Session
 
-from db.models import comment_model
+from app.db.models import comment_model
 
-from schemas import comment_schemas
+from app.schemas import comment_schemas
 
 
 def create_reply(owner_id: int, parent_id: int, post_id: int, db: Session, reply: comment_schemas.ReplyCreate):

@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 
-from db.models import user_model
+from app.db.models import user_model
 
-from schemas import user_schemas
-import authentication
+from app.schemas import user_schemas
+from app.authentication import Authentication
 
-auth_handler = authentication.Authentication()
+auth_handler = Authentication()
 
 
 def create_user(db: Session, user: user_schemas.UserCreate):

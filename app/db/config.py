@@ -3,7 +3,7 @@ from sqlalchemy.ext import declarative
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from settings import Settings
+from app.settings import Settings
 
 SQLALCHEMY_DATABASE_URL = Settings.SQLALCHEMY_DATABASE_URI
 

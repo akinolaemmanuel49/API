@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from db.models import post_model
+from app.db.models import post_model
 
-from schemas import post_schemas
+from app.schemas import post_schemas
 
 
 def create_post(db: Session, owner_id: int, post: post_schemas.PostCreate):
