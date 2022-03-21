@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 
 from pydantic import BaseModel
@@ -10,8 +11,7 @@ class CommentBase(BaseModel):
 
 
 class CommentCreate(CommentBase):
-    owner_id: int
-    post_id: int
+    pass
 
 
 class CommentUpdate(CommentBase):
@@ -23,8 +23,10 @@ class Comment(BaseModel):
     comment: str
     owner_id: int
     post_id: int
+    created: datetime.datetime
+    last_modified: datetime.datetime
 
-    replies: List = []
+    replies: List = None
 
     class Config:
         orm_mode = True
@@ -35,6 +37,4 @@ class ReplyBase(BaseModel):
 
 
 class ReplyCreate(ReplyBase):
-    owner_id: int
-    post_id: int
-    parent_id: int
+    pass

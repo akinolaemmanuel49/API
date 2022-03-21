@@ -3,16 +3,16 @@ This handles routes pertaining to creating, modiifying, logging in a user."""
 
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Security, Query
+from fastapi import APIRouter, Depends, HTTPException, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
-import dependencies
+from app import dependencies
 
-from db.dals.user_dal import auth_handler
-from db.dals import user_dal
+from app.db.dals.user_dal import auth_handler
+from app.db.dals import user_dal
 
-from schemas import user_schemas
+from app.schemas import user_schemas
 
 security = HTTPBearer()
 
@@ -33,11 +33,6 @@ def refresh_token(credentials: HTTPAuthorizationCredentials = Security(security)
     refresh_token = credentials.credentials
     new_token = auth_handler.refresh_token(refresh_token)
     return {"access_token": new_token}
-
-
-@router.get("/notasecret")
-def not_a_secret():
-    return "NOT A SECRET"
 
 
 @router.get("/", response_model=List[user_schemas.User])
@@ -71,11 +66,5 @@ def login(credentials: user_schemas.Credentials, db: Session = Depends(dependenc
 
     access_token = auth_handler.encode_token(db_user.id)
     refresh_token = auth_handler.encode_refresh_token(db_user.id)
-    return {"access_token": access_token, "refresh_token": refresh_token}
-
-
-@router.post("/secret")
-def secret_data(credentials: HTTPAuthorizationCredentials = Security(security)):
-    access_token = credentials.credentials
-    if (auth_handler.decode_token(access_token)):
-        return "SECRET DATA"
+    user_id = auth_handler.decode_token(access_token)
+    return {"access_token": access_token, "refresh_token": refresh_token, "user_id": user_id}

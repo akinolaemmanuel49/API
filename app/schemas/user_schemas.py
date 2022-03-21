@@ -18,6 +18,7 @@ class User(BaseModel):
     username: str
     email: str
     active: bool
+    is_admin: bool
     created: datetime.datetime
     last_modified: datetime.datetime
 
@@ -28,6 +29,7 @@ class User(BaseModel):
 class TokenData(BaseModel):
     access_token: str
     refresh_token: str
+    user_id: str
 
 
 class Credentials(BaseModel):

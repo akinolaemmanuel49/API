@@ -1,19 +1,23 @@
+import sqlalchemy
 from sqlalchemy.orm import Session
 
-from db.models import comment_model
+from app.db.models import comment_model
 
-from schemas import comment_schemas
+from app.schemas import comment_schemas
 
 
-def create_reply(db: Session, reply: comment_schemas.ReplyCreate):
+def create_reply(owner_id: int, parent_id: int, post_id: int, db: Session, reply: comment_schemas.ReplyCreate):
     db_reply = comment_model.Comment(comment=reply.reply)
-    db_reply.parent_id = reply.parent_id
-    db_reply.post_id = reply.post_id
-    db_reply.owner_id = reply.owner_id
-    db.add(db_reply)
-    db.commit()
-    db.refresh(db_reply)
-    return db_reply
+    db_reply.parent_id = parent_id
+    db_reply.post_id = post_id
+    db_reply.owner_id = owner_id
+    if db_reply.owner_id is not None:
+        db.add(db_reply)
+        db.commit()
+        db.refresh(db_reply)
+        return db_reply
+    else:
+        raise sqlalchemy.exc.SQLAlchemyError
 
 
 def get_replies_by_comment(db: Session, comment_id: int, skip: int = 0, limit: int = 100):

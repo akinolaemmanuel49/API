@@ -1,9 +1,10 @@
-import uvicorn
+# import uvicorn
 from fastapi import FastAPI
 
-from db.models import user_model as models
-from db.config import engine
-from routers import user_router, post_router, comment_router, reply_router
+
+from app.db.models import user_model as models
+from app.db.config import engine
+from app.routers import user_router, post_router, comment_router, reply_router
 
 app = FastAPI()
 app.include_router(user_router.router)
@@ -17,5 +18,5 @@ def startup():
     models.Base.metadata.create_all(bind=engine)
 
 
-if __name__ == '__main__':
-    uvicorn.run('main:app', host="127.0.0.1", port=8000, reload=True)
+# if __name__ == '__main__':
+#     uvicorn.run('main:app', host="127.0.0.1", port=8000, reload=True)

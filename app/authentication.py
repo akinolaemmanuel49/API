@@ -1,4 +1,3 @@
-import os
 import jwt
 from datetime import datetime, timedelta
 from typing import Optional
@@ -6,7 +5,7 @@ from typing import Optional
 from fastapi import HTTPException
 from passlib.context import CryptContext
 
-from settings import Settings
+from app.settings import Settings
 
 
 class Authentication:

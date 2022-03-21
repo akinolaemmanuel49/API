@@ -3,7 +3,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from schemas.comment_schemas import Comment
+from app.schemas.comment_schemas import Comment
 
 
 class PostBase(BaseModel):
@@ -11,7 +11,7 @@ class PostBase(BaseModel):
 
 
 class PostCreate(PostBase):
-    owner_id: int
+    pass
 
 
 class PostUpdate(PostBase):
@@ -22,8 +22,10 @@ class Post(PostBase):
     id: int
     post: str
     owner_id: int
+    created: datetime.datetime
+    last_modified: datetime.datetime
 
-    comments: List[Comment] = []
+    comments: List[Comment] = None
 
     class Config:
         orm_mode = True
