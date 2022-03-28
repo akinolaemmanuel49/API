@@ -22,3 +22,23 @@ def create_reply(owner_id: int, parent_id: int, post_id: int, db: Session, reply
 
 def get_replies_by_comment(db: Session, comment_id: int, skip: int = 0, limit: int = 100):
     return db.query(comment_model.Comment).filter(comment_model.Comment.parent_id == comment_id).order_by(comment_model.Comment.created.desc()).offset(skip).limit(limit).all()
+
+
+def get_all_user_replies(db: Session, user_id: int, skip: int = 0, limit: int = 100):
+    return db.query(comment_model.Comment).filter(comment_model.Comment.owner_id == user_id, comment_model.Comment.parent_id != None).order_by(comment_model.Comment.created.desc()).offset(skip).limit(limit).all()
+
+
+def update_reply(db: Session, user_id: int, reply_id: int, reply: comment_schemas.ReplyUpdate):
+    db_reply = db.query(comment_model.Comment).filter(
+        comment_model.Comment.id == reply_id, comment_model.Comment.owner_id == user_id, comment_model.Comment.parent_id != None).first()
+    db_reply.comment = reply.reply
+    db.commit()
+    return db_reply
+
+
+def delete_reply(db: Session, owner_id: int, reply_id: int):
+    db_reply = db.query(comment_model.Comment).filter(
+        comment_model.Comment.owner_id == owner_id, comment_model.Comment.id == reply_id, comment_model.Comment.parent_id != None).first()
+    db.delete(db_reply)
+    db.commit()
+    return db_reply

@@ -38,3 +38,7 @@ class ReplyBase(BaseModel):
 
 class ReplyCreate(ReplyBase):
     pass
+
+
+class ReplyUpdate(ReplyBase):
+    pass
