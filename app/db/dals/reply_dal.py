@@ -21,4 +21,4 @@ def create_reply(owner_id: int, parent_id: int, post_id: int, db: Session, reply
 
 
 def get_replies_by_comment(db: Session, comment_id: int, skip: int = 0, limit: int = 100):
-    return db.query(comment_model.Comment).filter(comment_model.Comment.parent_id == comment_id).order_by(comment_model.Comment.created_on.desc()).offset(skip).limit(limit).all()
+    return db.query(comment_model.Comment).filter(comment_model.Comment.parent_id == comment_id).order_by(comment_model.Comment.created.desc()).offset(skip).limit(limit).all()

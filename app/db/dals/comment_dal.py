@@ -21,15 +21,15 @@ def get_comment(db: Session, comment_id: int):
 
 
 def get_comments_by_post(db: Session, post_id: int, skip: int = 0, limit: int = 100):
-    return db.query(comment_model.Comment).filter(comment_model.Comment.post_id == post_id, comment_model.Comment.parent_id == None).order_by(comment_model.Comment.created_on.desc()).offset(skip).limit(limit).all()
+    return db.query(comment_model.Comment).filter(comment_model.Comment.post_id == post_id, comment_model.Comment.parent_id == None).order_by(comment_model.Comment.created.desc()).offset(skip).limit(limit).all()
 
 
 def get_all_user_comments(db: Session, user_id: int, skip: int = 0, limit: int = 100):
-    return db.query(comment_model.Comment).filter(comment_model.Comment.owner_id == user_id, comment_model.Comment.parent_id == None).order_by(comment_model.Comment.created_on.desc()).offset(skip).limit(limit).all()
+    return db.query(comment_model.Comment).filter(comment_model.Comment.owner_id == user_id, comment_model.Comment.parent_id == None).order_by(comment_model.Comment.created.desc()).offset(skip).limit(limit).all()
 
 
 def get_user_comments_by_post(db: Session, user_id: int, post_id: int, skip: int = 0, limit: int = 100):
-    return db.query(comment_model.Comment).filter(comment_model.Comment.owner_id == user_id, comment_model.Comment.post_id == post_id, comment_model.Comment.parent_id == None).order_by(comment_model.Comment.created_on.desc()).offset(skip).limit(limit).all()
+    return db.query(comment_model.Comment).filter(comment_model.Comment.owner_id == user_id, comment_model.Comment.post_id == post_id, comment_model.Comment.parent_id == None).order_by(comment_model.Comment.created.desc()).offset(skip).limit(limit).all()
 
 
 def update_comment(db: Session, user_id: int, comment_id: int, comment: comment_schemas.CommentUpdate):
