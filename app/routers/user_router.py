@@ -16,7 +16,7 @@ from app.schemas import user_schemas
 
 security = HTTPBearer()
 
-router = APIRouter(prefix="/users")
+router = APIRouter(prefix="/users", tags=['Users'])
 
 
 @router.post("/", response_model=user_schemas.User)

@@ -12,7 +12,7 @@ from app.schemas import comment_schemas
 
 security = HTTPBearer()
 
-router = APIRouter(prefix="/comments")
+router = APIRouter(prefix="/comments", tags=['Comments'])
 
 
 @router.post("/", response_model=comment_schemas.Comment)

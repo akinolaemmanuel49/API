@@ -12,7 +12,7 @@ from app.schemas import post_schemas
 
 security = HTTPBearer()
 
-router = APIRouter(prefix="/posts")
+router = APIRouter(prefix="/posts", tags=['Posts'])
 
 
 @router.post("/", response_model=post_schemas.Post)
