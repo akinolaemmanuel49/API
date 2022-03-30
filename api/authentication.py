@@ -5,7 +5,7 @@ from typing import Optional
 from fastapi import HTTPException
 from passlib.context import CryptContext
 
-from app.settings import Settings
+from api.v1.settings import Settings
 
 
 class Authentication:

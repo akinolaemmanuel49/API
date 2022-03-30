@@ -20,6 +20,3 @@ class Settings:
     JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
     JWT_EXPIRATION_MINUTES = int(os.getenv('JWT_EXPIRATION_MINUTES'))
     JWT_REFRESH_EXPIRE_HOURS = int(os.getenv('JWT_REFRESH_EXPIRE_HOURS'))
-
-
-print(Settings.SQLALCHEMY_DATABASE_URI)

@@ -3,7 +3,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from app.schemas.comment_schemas import Comment
+from api.v1.schemas.comment_schemas import Comment
 
 
 class PostBase(BaseModel):

@@ -4,11 +4,11 @@ from fastapi import APIRouter, Depends, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
-from app import dependencies
+from api.v1 import dependencies
 
-from app.db.dals import reply_dal
-from app.db.dals.user_dal import auth_handler
-from app.schemas import comment_schemas
+from api.v1.db.dals import reply_dal
+from api.v1.db.dals.user_dal import auth_handler
+from api.v1.schemas import comment_schemas
 
 security = HTTPBearer()
 

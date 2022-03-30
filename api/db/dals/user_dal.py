@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 
-from app.db.models import user_model
+from api.v1.db.models import user_model
 
-from app.schemas import user_schemas
-from app.authentication import Authentication
+from api.v1.schemas import user_schemas
+from api.v1.authentication import Authentication
 
 auth_handler = Authentication()
 
