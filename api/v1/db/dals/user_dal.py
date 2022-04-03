@@ -38,3 +38,11 @@ def get_user_by_username(db: Session, username: str):
 
 def get_user_by_email(db: Session, email: str):
     return db.query(user_model.User).filter(user_model.User.email == email).first()
+
+
+def delete_user(db: Session, user: user_model.User):
+    user = db.query(user_model.User).filter(
+        user_model.User.id == user.id).first()
+    if user:
+        db.delete(user)
+        db.commit()
