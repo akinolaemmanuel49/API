@@ -1,7 +1,7 @@
 import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, validator
 
 
 class UserBase(BaseModel):
@@ -9,14 +9,14 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    email: str
+    email: EmailStr
     password: str
 
 
 class User(BaseModel):
     id: int
     username: str
-    email: str
+    email: EmailStr
     active: bool
     is_admin: bool
     created: datetime.datetime
