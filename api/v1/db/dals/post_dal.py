@@ -6,7 +6,7 @@ from api.v1.schemas import post_schemas
 
 
 def create_post(db: Session, owner_id: int, post: post_schemas.PostCreate):
-    db_post = post_model.Post(post=post.post)
+    db_post = post_model.Post(title=post.title, body=post.body)
     db_post.owner_id = owner_id
     db.add(db_post)
     db.commit()
@@ -33,7 +33,8 @@ def get_a_post(db: Session, post_id: int):
 def update_post(db: Session, post_id: int, user_id: int, post: post_schemas.PostUpdate):
     db_post = db.query(post_model.Post).filter(
         post_model.Post.id == post_id, post_model.Post.owner_id == user_id).first()
-    db_post.post = post.post
+    db_post.title = post.title
+    db_post.body = post.body
     db.commit()
     return db_post
 
