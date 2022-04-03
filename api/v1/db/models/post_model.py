@@ -11,7 +11,6 @@ class Post(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, index=True)
-    # post = Column(String)
     title = Column(String)
     body = Column(String)
     tags = postgresql.ARRAY(str, dimensions=1)
