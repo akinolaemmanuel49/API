@@ -6,9 +6,9 @@ from sqlalchemy.orm import Session
 
 from api.v1 import dependencies
 
-from api.db.dals import post_dal
-from api.db.dals.user_dal import auth_handler
-from api.schemas import post_schemas
+from api.v1.db.dals import post_dal
+from api.v1.db.dals.user_dal import auth_handler
+from api.v1.schemas import post_schemas
 
 security = HTTPBearer()
 
