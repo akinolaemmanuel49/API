@@ -7,7 +7,8 @@ from api.v1.schemas.comment_schemas import Comment
 
 
 class PostBase(BaseModel):
-    post: str
+    title: str
+    body: str
 
 
 class PostCreate(PostBase):
@@ -20,7 +21,9 @@ class PostUpdate(PostBase):
 
 class Post(PostBase):
     id: int
-    post: str
+    title: str
+    body: str
+    tags: object
     owner_id: int
     created: datetime.datetime
     last_modified: datetime.datetime
