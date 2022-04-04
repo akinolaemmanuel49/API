@@ -2,4 +2,5 @@
 from migrate.versioning.shell import main
 
 if __name__ == '__main__':
-    main(repository='repository', url='postgresql://bit:password@localhost/db', debug='False')
+    main(repository='repository',
+         url='postgresql://bit:password@localhost/db', debug='False')
