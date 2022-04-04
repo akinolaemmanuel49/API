@@ -3,8 +3,6 @@ from typing import List
 
 from pydantic import BaseModel
 
-# from schemas.reply_schemas import Reply
-
 
 class CommentBase(BaseModel):
     comment: str
@@ -13,8 +11,15 @@ class CommentBase(BaseModel):
 class CommentCreate(CommentBase):
     pass
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "comment": "This is my first comment",
+            }
+        }
 
-class CommentUpdate(CommentBase):
+
+class CommentUpdate(CommentCreate):
     pass
 
 
@@ -39,6 +44,13 @@ class ReplyBase(BaseModel):
 class ReplyCreate(ReplyBase):
     pass
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "reply": "This is my first reply",
+            }
+        }
 
-class ReplyUpdate(ReplyBase):
+
+class ReplyUpdate(ReplyCreate):
     pass
