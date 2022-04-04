@@ -14,12 +14,20 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     pass
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "title": "Hello World",
+                "body": "This is my first post",
+            }
+        }
 
-class PostUpdate(PostBase):
+
+class PostUpdate(PostCreate):
     pass
 
 
-class Post(PostBase):
+class Post(BaseModel):
     id: int
     title: str
     body: str
