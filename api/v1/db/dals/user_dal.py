@@ -11,13 +11,17 @@ auth_handler = Authentication()
 def create_user(db: Session, user: user_schemas.UserCreate):
     hashed_password = auth_handler.encode_password(
         plain_password=user.password)
-    db_user = user_model.User(username=user.username,
-                              email=user.email, hashed_password=hashed_password)
-    db.add(db_user)
-    db.flush()
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    try:
+        db_user = user_model.User(username=user.username,
+                                  email=user.email, hashed_password=hashed_password)
+
+        db.add(db_user)
+        db.flush()
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
 
 
 def get_user(db: Session, user_id: int):
@@ -40,9 +44,26 @@ def get_user_by_email(db: Session, email: str):
     return db.query(user_model.User).filter(user_model.User.email == email).first()
 
 
+def update_user(db: Session, user: user_schemas.UserUpdate, username: str):
+    db_user = db.query(user_model.User).filter(
+        user_model.User.username == username).first()
+    if user:
+        try:
+            db_user.email = user.email
+            db_user.hashed_password = auth_handler.encode_password(
+                plain_password=user.password)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+    return db_user
+
+
 def delete_user(db: Session, user: user_model.User):
     user = db.query(user_model.User).filter(
         user_model.User.id == user.id).first()
     if user:
-        db.delete(user)
-        db.commit()
+        try:
+            db.delete(user)
+            db.commit()
+        except Exception as e:
+            db.rollback()
