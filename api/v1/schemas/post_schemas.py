@@ -23,7 +23,6 @@ class Post(PostBase):
     id: int
     title: str
     body: str
-    tags: object
     owner_id: int
     created: datetime.datetime
     last_modified: datetime.datetime
