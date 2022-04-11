@@ -5,7 +5,7 @@ description = ""
 authors = ["Abiodun Akinola <akinolaemmanuel49@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9.5"
+python = "^3.8.10"
 fastapi = {version = "^0.75.1"}
 SQLAlchemy = "^1.4.35"
 PyJWT = "^2.3.0"
