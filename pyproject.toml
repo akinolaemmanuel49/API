@@ -5,15 +5,18 @@ description = ""
 authors = ["Abiodun Akinola <akinolaemmanuel49@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-fastapi = {extras = ["all"], version = "^0.75.1"}
-SQLAlchemy = {extras = ["postgres"], version = "^1.4.35"}
-passlib = {extras = ["crypt"], version = "^1.7.4"}
-psycopg2 = "^2.9.3"
+python = "^3.9.5"
+fastapi = {version = "^0.75.1"}
+SQLAlchemy = "^1.4.35"
 PyJWT = "^2.3.0"
+psycopg2 = "^2.9.3"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+uvicorn = {extras = ["standard"], version = "^0.17.6"}
+pydantic = {extras = ["email"], version = "^1.9.0"}
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"
+python-dotenv = "^0.20.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

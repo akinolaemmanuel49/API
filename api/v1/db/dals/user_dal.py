@@ -24,7 +24,7 @@ def create_user(db: Session, user: user_schemas.UserCreate):
         db.rollback()
 
 
-def get_user(db: Session, user_id: int):
+def get_user_by_id(db: Session, user_id: int):
     user = db.query(user_model.User).filter(
         user_model.User.id == user_id).first()
     if user:
