@@ -17,7 +17,6 @@ env:
   JWT_EXPIRATION_MINUTES: ${{secrets.JWT_EXPIRATION_MINUTES}}
   JWT_REFRESH_EXPIRE_HOURS: ${{secrets.JWT_REFRESH_EXPIRE_HOURS}}
 
-
 jobs:
   build:
 
@@ -43,4 +42,4 @@ jobs:
         poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest
+        poetry run pytest
