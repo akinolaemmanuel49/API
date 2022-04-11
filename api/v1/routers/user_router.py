@@ -1,9 +1,11 @@
 """
-This handles routes pertaining to creating, modiifying, logging in a user."""
+This handles routes pertaining to creating, modiifying, logging in a user.
+"""
 
-from typing import List, Optional
+from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Security, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
@@ -98,16 +100,20 @@ def update_user(user: user_schemas.UserUpdate, credentials: HTTPAuthorizationCre
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.delete("/", response_model=response_schemas.ResponseDeleteUser)
-def delete_user(id: Optional[int], db: Session = Depends(dependencies.get_db)):
-    if id is not None:
-        db_user = user_dal.get_user(db=db, user_id=id)
+@router.delete("/", response_model=response_schemas.ResponseDeleteUser, status_code=status.HTTP_200_OK,
+               responses={
+                   404: {"model": response_schemas.ResponseDeleteUser, "description": "The item was not found."},
+                   400: {"model": response_schemas.ResponseDeleteUser, "description": "An Error occured."}
+               },)
+def delete_user(username: Optional[str], db: Session = Depends(dependencies.get_db)):
+    if username is not None:
+        db_user = user_dal.get_user_by_username(db=db, username=username)
         if db_user:
             user_dal.delete_user(db=db, user=db_user)
     else:
         raise HTTPException(
-            status_code=400, detail="Must provide user id.")
+            status_code=400, detail=jsonable_encoder(response_schemas.ResponseDeleteUser()))
     if db_user is None:
         raise HTTPException(
-            status_code=404, detail="User not found.")
-    return response_schemas.ResponseDeleteUser(data=db_user)
+            status_code=404, detail=jsonable_encoder(response_schemas.ResponseDeleteUser()))
+    return response_schemas.ResponseDeleteUser()

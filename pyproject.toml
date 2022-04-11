@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "api"
+version = "0.1.0"
+description = ""
+authors = ["Abiodun Akinola <akinolaemmanuel49@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = {extras = ["all"], version = "^0.75.1"}
+SQLAlchemy = {extras = ["postgres"], version = "^1.4.35"}
+passlib = {extras = ["crypt"], version = "^1.7.4"}
+psycopg2 = "^2.9.3"
+PyJWT = "^2.3.0"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
