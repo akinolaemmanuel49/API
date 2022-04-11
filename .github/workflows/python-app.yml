@@ -9,6 +9,20 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  SECRET_KEY: 202de8ade95f37eb8bc630d47c1fe140fb573fe5ce7dc3f4a7468811388b1a64
+  DATABASE_URL: postgres://mpxrlglzqkjjpl:30270589932f8a763e7c43e6e4b5d4d9c63a7807e69e3654696ba08cf418c0b2@ec2-54-80-122-11.compute-1.amazonaws.com:5432/d9v0nli5clfsup
+  DB_USER: mpxrlglzqkjjpl
+  DB_PASS: 30270589932f8a763e7c43e6e4b5d4d9c63a7807e69e3654696ba08cf418c0b2
+  DB_NAME: d9v0nli5clfsup
+  DB_PORT: 5432
+  DB_HOST: ec2-54-80-122-11.compute-1.amazonaws.com
+  JWT_SECRET_KEY: fbe1fcc143774486d154fb3ff2a7e3a464a46a8e4917dc1d4adf63f4f2cbeec9
+  JWT_ALGORITHM: HS256
+  JWT_EXPIRATION_MINUTES: 30
+  JWT_REFRESH_EXPIRE_HOURS: 12
+
+
 jobs:
   build:
 
