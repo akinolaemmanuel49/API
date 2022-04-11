@@ -7,7 +7,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Security, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from pydantic import ValidationError
+from pydantic import EmailStr, ValidationError
 from sqlalchemy.orm import Session
 
 from api.v1 import dependencies
@@ -55,16 +55,30 @@ def get_users(db: Session = Depends(dependencies.get_db), skip: int = 0, limit: 
     return response_schemas.ResponseMultipleUsersQuery(data=db_users, count=len(db_users))
 
 
-@router.get("/user", response_model=response_schemas.ResponseSingleUserQuery)
-def get_user(username: Optional[str] = None, db: Session = Depends(dependencies.get_db)):
+@router.get("/user", response_model=response_schemas.ResponseSingleUserQuery, responses={status.HTTP_400_BAD_REQUEST: {'model': response_schemas.ResponseError, 'description': 'Error: Bad request'}, status.HTTP_404_NOT_FOUND: {'model': response_schemas.ResponseError, 'description': 'Error: User not found'}})
+def get_user(id: Optional[int] = None, username: Optional[str] = None, email: Optional[EmailStr] = None, db: Session = Depends(dependencies.get_db)):
+    if id is not None:
+        db_user = user_dal.get_user_by_id(db=db, id=id)
+        if db_user:
+            user_dal.delete_user(db=db, user=db_user)
+
     if username is not None:
         db_user = user_dal.get_user_by_username(db=db, username=username)
-    else:
-        raise HTTPException(
-            status_code=400, detail="Must provide a username.")
+        if db_user:
+            user_dal.delete_user(db=db, user=db_user)
+
+    if email is not None:
+        db_user = user_dal.get_user_by_email(db=db, email=email)
+        if db_user:
+            user_dal.delete_user(db=db, user=db_user)
+
+    if id == None and username == None and email == None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=jsonable_encoder(
+            response_schemas.ResponseError(message="No user id, username or email provided", code=status.HTTP_400_BAD_REQUEST)))
+
     if db_user is None:
         raise HTTPException(
-            status_code=404, detail="User not found.")
+            status_code=status.HTTP_404_NOT_FOUND, detail=jsonable_encoder(response_schemas.ResponseError(message="User not found", code=status.HTTP_404_NOT_FOUND)))
     return response_schemas.ResponseSingleUserQuery(data=db_user)
 
 
@@ -83,37 +97,53 @@ def login(credentials: user_schemas.Credentials, db: Session = Depends(dependenc
     return user_schemas.TokenData(access_token=access_token, refresh_token=refresh_token, username=username)
 
 
-@router.put("/user", response_model=response_schemas.ResponseSingleUserQuery)
+@router.put("/user", response_model=response_schemas.ResponseSingleUserQuery, responses={status.HTTP_400_BAD_REQUEST: {'model': response_schemas.ResponseError, 'description': 'Error: Bad request'}, status.HTTP_404_NOT_FOUND: {'model': response_schemas.ResponseError, 'description': 'Error: User not found'}, status.HTTP_401_UNAUTHORIZED: {'model': response_schemas.ResponseError, 'description': 'Error: Unauthorized'}})
 def update_user(user: user_schemas.UserUpdate, credentials: HTTPAuthorizationCredentials = Security(security), db: Session = Depends(dependencies.get_db)):
     access_token = credentials.credentials
     username = auth_handler.decode_token(access_token)
     if username is None:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=jsonable_encoder(response_schemas.ResponseError(
+            message="User is not authorized.", code=status.HTTP_401_UNAUTHORIZED)))
     db_user = user_dal.get_user_by_username(db=db, username=username)
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=jsonable_encoder(response_schemas.ResponseError(
+            message="User not found.", code=status.HTTP_404_NOT_FOUND)))
     try:
         updated_user = user_dal.update_user(
             db=db, user=user, username=username)
         return response_schemas.ResponseSingleUserQuery(data=updated_user)
     except ValidationError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=jsonable_encoder(
+            response_schemas.ResponseError(message=str(e), code=status.HTTP_400_BAD_REQUEST)))
 
 
-@router.delete("/", response_model=response_schemas.ResponseDeleteUser, status_code=status.HTTP_200_OK,
+@router.delete("/", response_model=response_schemas.ResponseSuccess, status_code=status.HTTP_200_OK,
                responses={
-                   404: {"model": response_schemas.ResponseDeleteUser, "description": "The item was not found."},
-                   400: {"model": response_schemas.ResponseDeleteUser, "description": "An Error occured."}
+                   status.HTTP_404_NOT_FOUND: {"model": response_schemas.ResponseError, "description": "Error: Not Found."},
+                   status.HTTP_400_BAD_REQUEST: {
+                       "model": response_schemas.ResponseError, "description": "Error: Bad Request."}
                },)
-def delete_user(username: Optional[str], db: Session = Depends(dependencies.get_db)):
+def delete_user(id: Optional[int] = None, username: Optional[str] = None, email: Optional[EmailStr] = None, db: Session = Depends(dependencies.get_db)):
+    if id is not None:
+        db_user = user_dal.get_user_by_id(db=db, id=id)
+        if db_user:
+            user_dal.delete_user(db=db, user=db_user)
+
     if username is not None:
         db_user = user_dal.get_user_by_username(db=db, username=username)
         if db_user:
             user_dal.delete_user(db=db, user=db_user)
-    else:
-        raise HTTPException(
-            status_code=400, detail=jsonable_encoder(response_schemas.ResponseDeleteUser()))
+
+    if email is not None:
+        db_user = user_dal.get_user_by_email(db=db, email=email)
+        if db_user:
+            user_dal.delete_user(db=db, user=db_user)
+
+    if id == None and username == None and email == None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=jsonable_encoder(
+            response_schemas.ResponseError(message="Must provide an id, username or email.", code=status.HTTP_400_BAD_REQUEST)))
+
     if db_user is None:
         raise HTTPException(
-            status_code=404, detail=jsonable_encoder(response_schemas.ResponseDeleteUser()))
-    return response_schemas.ResponseDeleteUser()
+            status_code=status.HTTP_404_NOT_FOUND, detail=jsonable_encoder(response_schemas.ResponseError(message="User not found.")))
+    return response_schemas.ResponseSuccess(message="User was successfully deleted.", code=status.HTTP_404_NOT_FOUND)

@@ -9,18 +9,6 @@ class ResponseBase(BaseModel):
     pass
 
 
-class ResponseQueryError(ResponseBase):
-    error: str = "Query error"
-    message: Optional[str] = None
-    code: int = status.HTTP_400_BAD_REQUEST
-
-
-class ResponseCreateUserError(ResponseBase):
-    error: str = "Create error"
-    message: Optional[str] = None
-    code: int = status.HTTP_400_BAD_REQUEST
-
-
 class ResponseCreateUser(ResponseBase):
     data: User
     message: str = "Success"
@@ -40,6 +28,11 @@ class ResponseMultipleUsersQuery(ResponseBase):
     code: int = status.HTTP_200_OK
 
 
-class ResponseDeleteUser(ResponseBase):
-    message: str = "Success"
+class ResponseSuccess(ResponseBase):
+    message: Optional[str] = None
     code: int = status.HTTP_200_OK
+
+
+class ResponseError(ResponseBase):
+    message: Optional[str] = None
+    code: int
