@@ -72,6 +72,6 @@ def test_login_missing_password():
     assert response.status_code == 422
 
 
-def delete_test_user():
+def test_delete_user():
     response = client.delete("/users/?username=testuser0")
     assert response.status_code == 200
