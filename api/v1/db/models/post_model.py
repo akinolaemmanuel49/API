@@ -1,4 +1,5 @@
 import datetime
+from pydantic import validate_email
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
@@ -15,7 +16,8 @@ class Post(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="posts")
-    comments = relationship("Comment", back_populates="post")
+    comments = relationship(
+        "Comment", back_populates="post", cascade="all, delete-orphan")
 
     created = Column(DateTime, default=lambda: datetime.datetime.utcnow())
     last_modified = Column(DateTime, default=lambda: datetime.datetime.utcnow(
