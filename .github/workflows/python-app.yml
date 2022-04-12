@@ -5,9 +5,9 @@ name: API
 
 on:
   push:
-    branches: [master]
+    branches: [ main ]
   pull_request:
-    branches: [master]
+    branches: [ main ]
 
 env:
   SECRET_KEY: ${{secrets.SECRET_KEY}}
