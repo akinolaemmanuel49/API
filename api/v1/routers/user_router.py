@@ -11,9 +11,7 @@ from pydantic import EmailStr, ValidationError
 from sqlalchemy.orm import Session
 
 from api.v1 import dependencies
-
 from api.v1.db.dals import user_dal
-
 from api.v1.schemas import user_schemas, response_schemas
 
 security = HTTPBearer()
