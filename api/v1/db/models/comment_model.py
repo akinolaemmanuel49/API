@@ -19,7 +19,8 @@ class Comment(Base):
     post = relationship("Post", back_populates="comments")
     parent = relationship("Comment", remote_side=[
                           id], back_populates="replies")
-    replies = relationship("Comment", back_populates="parent")
+    replies = relationship(
+        "Comment", back_populates="parent", cascade="all, delete-orphan")
 
     created = Column(DateTime, default=lambda: datetime.datetime.utcnow())
     last_modified = Column(DateTime, default=lambda: datetime.datetime.utcnow(

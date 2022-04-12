@@ -1,6 +1,5 @@
 import re
 import datetime
-from typing import List, Optional
 
 from pydantic import BaseModel, EmailStr, validator
 
@@ -108,6 +107,17 @@ class User(BaseModel):
 
     class Config:
         orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 0,
+                "username": "johndoe",
+                "email": "johndoe@mail.com",
+                "active": True,
+                "is_admin": False,
+                "created": datetime.datetime.utcnow(),
+                "last_modified": datetime.datetime.utcnow()
+            }
+        }
 
 
 class TokenData(BaseModel):

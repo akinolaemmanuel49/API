@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 from sqlalchemy import Boolean, Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
@@ -19,8 +20,11 @@ class User(Base):
     active = Column(Boolean, index=True, default=True, nullable=False)
     is_admin = Column(Boolean, index=True, default=False, nullable=False)
 
-    posts = relationship("Post", back_populates="owner")
-    comments = relationship("Comment", back_populates="owner")
+    posts = relationship("Post", back_populates="owner",
+                         cascade="all, delete-orphan")
+    comments = relationship(
+        "Comment", back_populates="owner", cascade="all, delete-orphan")
+    # profile = relationship("Profile", back_populates="owner")
 
     created = Column(
         DateTime, default=lambda: datetime.datetime.utcnow(), index=True, nullable=False)
