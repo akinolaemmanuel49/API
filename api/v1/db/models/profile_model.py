@@ -1,5 +1,4 @@
 import datetime
-from email.policy import default
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Date
 from sqlalchemy.orm import relationship
