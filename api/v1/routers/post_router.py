@@ -1,3 +1,7 @@
+"""
+This handles routes concerned with the creation, fetching, modification, and deletion of posts.
+"""
+
 from typing import List
 
 from fastapi import APIRouter, Depends, Security

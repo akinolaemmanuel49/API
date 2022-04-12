@@ -1,3 +1,6 @@
+"""
+This handles routes concerned with the creation, fetching, modification and deletion of comments.
+"""
 from typing import List
 
 from fastapi import APIRouter, Depends, Security
