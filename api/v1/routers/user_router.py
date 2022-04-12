@@ -1,5 +1,5 @@
 """
-This handles routes pertaining to creating, modiifying, logging in a user.
+This handles routes pertaining to creating, modifying, logging in a user.
 """
 
 from typing import Optional
