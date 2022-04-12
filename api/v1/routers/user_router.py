@@ -30,12 +30,12 @@ def create_user(user: user_schemas.UserCreate, db: Session = Depends(dependencie
     if check_username:
         if check_username.username == user.username:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail=response_schemas.ResponseError(message="This username is already taken.", code=status.HTTP_400_BAD_REQUEST))
+                status_code=status.HTTP_400_BAD_REQUEST, detail=jsonable_encoder(response_schemas.ResponseError(message="This username is already taken.", code=status.HTTP_400_BAD_REQUEST)))
     check_email = user_dal.get_user_by_email(db=db, email=user.email)
     if check_email:
         if check_email.email == user.email:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail=response_schemas.ResponseError(message="Email is already registered.", code=status.HTTP_400_BAD_REQUEST))
+                status_code=status.HTTP_400_BAD_REQUEST, detail=jsonable_encoder(response_schemas.ResponseError(message="Email is already registered.", code=status.HTTP_400_BAD_REQUEST)))
     try:
         new_user = user_dal.create_user(db=db, user=user)
         return response_schemas.ResponseCreateUser(data=new_user)
