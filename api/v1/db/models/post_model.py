@@ -1,5 +1,4 @@
 import datetime
-from pydantic import validate_email
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship

@@ -20,7 +20,7 @@ def create_user(db: Session, user: user_schemas.UserCreate):
         db.commit()
         db.refresh(db_user)
         return db_user
-    except Exception as e:
+    except Exception:
         db.rollback()
 
 

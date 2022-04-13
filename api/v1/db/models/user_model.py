@@ -1,5 +1,4 @@
 import datetime
-import uuid
 
 from sqlalchemy import Boolean, Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
@@ -24,7 +23,8 @@ class User(Base):
                          cascade="all, delete-orphan")
     comments = relationship(
         "Comment", back_populates="owner", cascade="all, delete-orphan")
-    # profile = relationship("Profile", back_populates="owner")
+    profile = relationship(
+        "Profile", back_populates="owner", cascade="all, delete-orphan")
 
     created = Column(
         DateTime, default=lambda: datetime.datetime.utcnow(), index=True, nullable=False)

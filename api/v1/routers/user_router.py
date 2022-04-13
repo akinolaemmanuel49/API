@@ -11,9 +11,7 @@ from pydantic import EmailStr, ValidationError
 from sqlalchemy.orm import Session
 
 from api.v1 import dependencies
-
 from api.v1.db.dals import user_dal
-
 from api.v1.schemas import user_schemas, response_schemas
 
 security = HTTPBearer()
@@ -124,25 +122,19 @@ def update_user(user: user_schemas.UserUpdate, credentials: HTTPAuthorizationCre
 
 @router.delete("/", response_model=response_schemas.ResponseSuccess, status_code=status.HTTP_200_OK,
                responses=responses,)
-def delete_user(id: Optional[int] = None, username: Optional[str] = None, email: Optional[EmailStr] = None, db: Session = Depends(dependencies.get_db)):
-    if id is not None:
-        db_user = user_dal.get_user_by_id(db=db, user_id=id)
-        if db_user:
-            user_dal.delete_user(db=db, user=db_user)
-
-    if username is not None:
+def delete_user(credentials: HTTPAuthorizationCredentials = Security(security), db: Session = Depends(dependencies.get_db)):
+    access_token = credentials.credentials
+    username = user_dal.auth_handler.decode_token(access_token)
+    if username is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=jsonable_encoder(response_schemas.ResponseError(
+            message="User is not authorized.", code=status.HTTP_401_UNAUTHORIZED)))
+    else:
         db_user = user_dal.get_user_by_username(db=db, username=username)
         if db_user:
             user_dal.delete_user(db=db, user=db_user)
-
-    if email is not None:
-        db_user = user_dal.get_user_by_email(db=db, email=email)
-        if db_user:
-            user_dal.delete_user(db=db, user=db_user)
-
-    if id == None and username == None and email == None:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=jsonable_encoder(
-            response_schemas.ResponseError(message="Must provide an id, username or email.", code=status.HTTP_400_BAD_REQUEST)))
+        else:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=jsonable_encoder(
+                response_schemas.ResponseError(message="An error occurred.", code=status.HTTP_400_BAD_REQUEST)))
 
     if db_user is None:
         raise HTTPException(
