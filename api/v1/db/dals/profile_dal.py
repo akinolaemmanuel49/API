@@ -18,6 +18,15 @@ def create_profile(db: Session, user: user_model.User, profile: profile_schemas.
         db.rollback()
 
 
+def get_user_profile(db: Session, user: user_model.User, profile_id: int):
+    try:
+        db_profile = db.query(profile_model.Profile).filter(
+            profile_model.Profile.owner_id == user.id, profile_model.Profile.id == profile_id).first()
+        return db_profile
+    except Exception:
+        db.rollback()
+
+
 def get_user_profiles(db: Session, user: user_model.User, skip: int = 0, limit: int = 100):
     try:
         db_profile = db.query(profile_model.Profile).filter(
