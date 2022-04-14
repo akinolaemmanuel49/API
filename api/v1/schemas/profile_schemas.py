@@ -32,8 +32,6 @@ class ProfileUpdate(ProfileCreate):
 
 class Profile(BaseModel):
     id: int
-    username: str
-    email: EmailStr
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     date_of_birth: Optional[datetime.date] = None
