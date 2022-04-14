@@ -67,5 +67,9 @@ def test_login_missing_password():
 
 
 def test_delete_user():
-    response = client.delete("/users/?username=testuser0")
+    auth_token = client.post(
+        "/users/login", json={"username": "testuser0", "password": "password"}
+    ).json()
+    response = client.delete(
+        "/users/?username=testuser0", headers={"Authorization": f"Bearer {auth_token['access_token']}"})
     assert response.status_code == status.HTTP_200_OK
